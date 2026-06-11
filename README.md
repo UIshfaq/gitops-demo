@@ -155,8 +155,8 @@ Dans le dossier de l'application :
 
 ```bash
 docker login
-docker build -t pseudo/gitops-site:1.0 .
-docker push pseudo/gitops-site:1.0
+docker build -t TON_PSEUDO_DOCKER/gitops-site:1.0 .
+docker push TON_PSEUDO_DOCKER/gitops-site:1.0
 ```
 
 > ⚠️ L'image doit être en **public** sur Docker Hub pour que le cluster puisse la télécharger.
@@ -165,13 +165,13 @@ docker push pseudo/gitops-site:1.0
 
 Via l'interface (bouton **NEW APP**) ou via le fichier `application.yaml`, avec ces paramètres :
 
-| Champ | Valeur |
-|---|---|
+| Champ | Valeur                                       |
+|---|----------------------------------------------|
 | Repository URL | `https://github.com/UIshfaq/gitops-demo.git` |
-| Revision | `HEAD` |
-| Path | `manifests` |
-| Cluster | `https://kubernetes.default.svc` |
-| Namespace | `default` |
+| Revision | `HEAD`                                       |
+| Path | `manifests`                                  |
+| Cluster | `https://kubernetes.default.svc`             |
+| Namespace | `default`                                    |
 
 ArgoCD lit alors le dossier `manifests/`, applique les fichiers, et l'application apparaît dans l'interface.
 
@@ -187,6 +187,31 @@ minikube service demo-app -n default --url
 
 ---
 
+## 🔌 Relancer le projet après extinction du PC
+
+Au redémarrage de la machine, rien ne tourne. Relancer dans cet ordre :
+
+| Étape | Action / commande | Terminal à garder ouvert |
+|---|---|---|
+| 1 | Lancer **Docker Desktop** et attendre qu'il soit prêt | — |
+| 2 | Ouvrir **Ubuntu** (WSL2) | — |
+| 3 | `minikube start --driver=docker` | non |
+| 4 | `minikube status` (doit afficher *Running*) | non |
+| 5 | `kubectl port-forward svc/argocd-server -n argocd 8080:443` | ✅ oui |
+| 6 | `minikube service demo-app -n default --url` (dans un 2e terminal) | ✅ oui |
+
+Les pods et ArgoCD reviennent automatiquement après `minikube start` : aucune réinstallation n'est nécessaire.
+
+> 💡 Le jour de la soutenance, effectuer ces étapes **en avance** : le démarrage de Minikube prend 1 à 2 minutes. Prévoir **deux terminaux** ouverts (interface ArgoCD + accès à la page).
+
+**Mettre en pause proprement à la fin :**
+
+```bash
+minikube stop      # libère les ressources, l'état est conservé
+```
+
+---
+
 ## 🔄 Comment on travaille au quotidien (sans workflow CI/CD)
 
 Le déploiement de l'image est géré **manuellement**, avec des **tags versionnés** (1.0, 2.0, 3.0…). C'est volontaire : chaque version est traçable, et ArgoCD redéploie automatiquement dès que le tag change dans le `deployment.yaml`.
@@ -197,11 +222,11 @@ Le déploiement de l'image est géré **manuellement**, avec des **tags versionn
 
 ```bash
 # 1. construire la nouvelle version (incrémenter le numéro)
-docker build -t pseudo/gitops-site:2.0 .
-docker push pseudo/gitops-site:2.0
+docker build -t TON_PSEUDO_DOCKER/gitops-site:2.0 .
+docker push TON_PSEUDO_DOCKER/gitops-site:2.0
 
 # 2. mettre à jour le tag dans gitops-demo/manifests/deployment.yaml
-#    image: pseudo/gitops-site:2.0
+#    image: TON_PSEUDO_DOCKER/gitops-site:2.0
 
 # 3. pousser la modification
 git commit -am "page version 2.0"
@@ -238,8 +263,8 @@ C'est la démonstration centrale du projet : une modification de la page sur Git
 # 1. modifier le contenu de index.html (ex: "Version 1" → "Version 2")
 
 # 2. construire et publier la nouvelle version
-docker build -t pseudo/gitops-site:2.0 .
-docker push pseudo/gitops-site:2.0
+docker build -t TON_PSEUDO_DOCKER/gitops-site:2.0 .
+docker push TON_PSEUDO_DOCKER/gitops-site:2.0
 
 # 3. mettre à jour le tag dans deployment.yaml puis pousser
 git commit -am "page version 2.0"
