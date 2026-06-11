@@ -155,8 +155,8 @@ Dans le dossier de l'application :
 
 ```bash
 docker login
-docker build -t uishfaq/gitops-site:1.0 .
-docker push uishfaq/gitops-site:1.0
+docker build -t pseudo/gitops-site:1.0 .
+docker push pseudo/gitops-site:1.0
 ```
 
 > ⚠️ L'image doit être en **public** sur Docker Hub pour que le cluster puisse la télécharger.
@@ -197,11 +197,11 @@ Le déploiement de l'image est géré **manuellement**, avec des **tags versionn
 
 ```bash
 # 1. construire la nouvelle version (incrémenter le numéro)
-docker build -t uishfaq/gitops-site:2.0 .
-docker push uishfaq/gitops-site:2.0
+docker build -t pseudo/gitops-site:2.0 .
+docker push pseudo/gitops-site:2.0
 
 # 2. mettre à jour le tag dans gitops-demo/manifests/deployment.yaml
-#    image: uishfaq/gitops-site:2.0
+#    image: pseudo/gitops-site:2.0
 
 # 3. pousser la modification
 git commit -am "page version 2.0"
@@ -238,8 +238,8 @@ C'est la démonstration centrale du projet : une modification de la page sur Git
 # 1. modifier le contenu de index.html (ex: "Version 1" → "Version 2")
 
 # 2. construire et publier la nouvelle version
-docker build -t uishfaq/gitops-site:2.0 .
-docker push uishfaq/gitops-site:2.0
+docker build -t pseudo/gitops-site:2.0 .
+docker push pseudo/gitops-site:2.0
 
 # 3. mettre à jour le tag dans deployment.yaml puis pousser
 git commit -am "page version 2.0"
