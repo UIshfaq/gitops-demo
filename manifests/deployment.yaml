@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: uishfaq/gitops-site:2.0
+          image: uishfaq/gitops-site:3.0
           ports:
             - containerPort: 80
