@@ -1,0 +1,10 @@
+# JetBrains
+.idea/
+
+# Node (résidus, pas utiles ici)
+node_modules/
+index.js
+package.json
+
+# Secrets
+.env
